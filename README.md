@@ -1,0 +1,1 @@
+The purpose of this project is to make an easy-to-use web interface to count the number of lines of code in a GitHub repository.
