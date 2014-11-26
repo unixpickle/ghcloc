@@ -43,19 +43,19 @@ func CountInFile(repo *Repository, path string) (*Counts, error) {
 		"mk": "Makefile", "rs": "Rust", "s": "Assembly", "asm": "Assembly",
 		"php": "PHP", "html": "HTML", "css": "CSS", "py": "Python"}
 	result := NewCounts()
-	
+
 	// Detect the language or return nothing.
 	language, ok := supported[strings.ToLower(extension)]
 	if !ok {
 		return result, nil
 	}
-	
+
 	// Read the file or return nothing.
 	file, err := repo.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// Get the contents and count the lines.
 	if data, err := file.Bytes(); err == nil {
 		textContents := string(data)
@@ -64,7 +64,7 @@ func CountInFile(repo *Repository, path string) (*Counts, error) {
 	} else {
 		return nil, err
 	}
-	
+
 	return result, nil
 }
 

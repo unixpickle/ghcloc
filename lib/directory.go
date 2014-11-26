@@ -7,7 +7,7 @@ import (
 
 const (
 	FILE_TYPE = "file"
-	DIR_TYPE = "dir"
+	DIR_TYPE  = "dir"
 )
 
 type Entity struct {
@@ -39,7 +39,7 @@ func (self *Repository) ReadDir(path string) ([]Entity, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// Check for raw error value
 	var raw map[string]string
 	if err := json.Unmarshal(contents, &raw); err == nil {
@@ -47,7 +47,7 @@ func (self *Repository) ReadDir(path string) ([]Entity, error) {
 			return nil, errors.New(message)
 		}
 	}
-	
+
 	var result []Entity
 	if err := json.Unmarshal(contents, &result); err != nil {
 		return nil, err

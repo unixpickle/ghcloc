@@ -21,16 +21,16 @@ func main() {
 	fmt.Scanln(&password)
 	setTTYEcho(true)
 	fmt.Println("")
-	
+
 	repo, err := ghcloc.ParseRepository(os.Args[1])
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Invalid repository: " + err.Error())
+		fmt.Fprintln(os.Stderr, "Invalid repository: "+err.Error())
 		os.Exit(1)
 	}
 	repo.Authenticate(username, password)
 	fmt.Println("Counting...")
 	if counts, err := ghcloc.CountInDir(repo, "/"); err != nil {
-		fmt.Fprintln(os.Stderr, "Failed to count lines in /: " + err.Error())
+		fmt.Fprintln(os.Stderr, "Failed to count lines in /: "+err.Error())
 		os.Exit(1)
 	} else {
 		fmt.Println("Total line counts:")
@@ -46,7 +46,7 @@ func printTable(table map[string]int) {
 		}
 	}
 	for key, value := range table {
-		for i := 0; i < maxLen - len(key); i++ {
+		for i := 0; i < maxLen-len(key); i++ {
 			fmt.Print(" ")
 		}
 		fmt.Printf("%s %d", key, value)
