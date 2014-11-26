@@ -2,11 +2,17 @@ package ghcloc
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 )
 
-type FileInfo struct {
+const (
+	FILE_TYPE = "file"
+	DIR_TYPE = "dir"
+)
+
+type Entity struct {
 	Name    string            `json:"name"`
 	Path    string            `json:"path"`
 	SHA     string            `json:"sha"`
@@ -18,7 +24,15 @@ type FileInfo struct {
 	Links   map[string]string `json:"_links"`
 }
 
-func (self *Repository) ReadDir(path string) ([]FileInfo, error) {
+func (self *Entity) IsFile() bool {
+	return self.Type == FILE_TYPE
+}
+
+func (self *Entity) IsDir() bool {
+	return self.Type == DIR_TYPE
+}
+
+func (self *Repository) ReadDir(path string) ([]Entity, error) {
 	if path == "" {
 		return self.ReadDir("/")
 	}
@@ -31,7 +45,16 @@ func (self *Repository) ReadDir(path string) ([]FileInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	var result []FileInfo
+	
+	// Check for raw error value
+	var raw map[string]string
+	if err := json.Unmarshal(contents, &raw); err == nil {
+		if message, ok := raw["message"]; ok {
+			return nil, errors.New(message)
+		}
+	}
+	
+	var result []Entity
 	if err := json.Unmarshal(contents, &result); err != nil {
 		return nil, err
 	}
