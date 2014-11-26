@@ -27,15 +27,6 @@ func (self *Repository) ReadFile(path string) (*File, error) {
 		return nil, err
 	}
 
-	// Check for raw error value
-	var raw map[string]string
-	if err := json.Unmarshal(contents, &raw); err == nil {
-		if message, ok := raw["message"]; ok {
-			return nil, errors.New(message)
-		}
-	}
-
-	// Decode
 	var result File
 	if err := json.Unmarshal(contents, &result); err != nil {
 		return nil, err

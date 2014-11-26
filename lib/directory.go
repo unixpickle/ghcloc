@@ -1,9 +1,6 @@
 package ghcloc
 
-import (
-	"encoding/json"
-	"errors"
-)
+import "encoding/json"
 
 const (
 	FILE_TYPE = "file"
@@ -38,14 +35,6 @@ func (self *Repository) ReadDir(path string) ([]Entity, error) {
 	contents, err := self.Request(url)
 	if err != nil {
 		return nil, err
-	}
-
-	// Check for raw error value
-	var raw map[string]string
-	if err := json.Unmarshal(contents, &raw); err == nil {
-		if message, ok := raw["message"]; ok {
-			return nil, errors.New(message)
-		}
 	}
 
 	var result []Entity

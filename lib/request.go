@@ -1,6 +1,8 @@
 package ghcloc
 
 import (
+	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,7 +22,21 @@ func (self *Repository) Request(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ioutil.ReadAll(res.Body)
+	data, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check for raw error value
+	var raw map[string]interface{}
+	if err := json.Unmarshal(data, &raw); err == nil {
+		if message, ok := raw["message"]; ok {
+			if s, ok := message.(string); ok {
+				return nil, errors.New(s)
+			}
+		}
+	}
+	return data, nil
 }
 
 func (self *Repository) waitReqSem() {
