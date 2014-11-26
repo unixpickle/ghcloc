@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "express": "3.4.x",
-    "sloc": "0.0.x",
-    "coffee-script": "1.x.x"
-  }
-}
