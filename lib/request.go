@@ -6,6 +6,8 @@ import (
 )
 
 func (self *Repository) Request(url string) ([]byte, error) {
+	self.waitReqSem()
+	defer self.doneReqSem()
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -19,4 +21,12 @@ func (self *Repository) Request(url string) ([]byte, error) {
 		return nil, err
 	}
 	return ioutil.ReadAll(res.Body)
+}
+
+func (self *Repository) waitReqSem() {
+	self.ReqSem <- struct{}{}
+}
+
+func (self *Repository) doneReqSem() {
+	<-self.ReqSem
 }

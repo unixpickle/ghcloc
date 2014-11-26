@@ -6,14 +6,16 @@ import (
 )
 
 type Counts struct {
+	FileCount  int
 	TotalLines map[string]int
 }
 
 func NewCounts() *Counts {
-	return &Counts{map[string]int{}}
+	return &Counts{0, map[string]int{}}
 }
 
 func (self *Counts) Add(other *Counts) {
+	self.FileCount += other.FileCount
 	for language, count := range other.TotalLines {
 		self.TotalLines[language] += count
 	}
@@ -61,6 +63,7 @@ func CountInFile(repo *Repository, path string) (*Counts, error) {
 		textContents := string(data)
 		lines := strings.Count(textContents, "\n") + 1
 		result.TotalLines[language] = lines
+		result.FileCount = 1
 	} else {
 		return nil, err
 	}

@@ -8,10 +8,31 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Fprintln(os.Stderr, "Usage: ghcloc user/repo")
+	if len(os.Args) < 2 || len(os.Args) > 3 {
+		fmt.Fprintln(os.Stderr, "Usage: ghcloc user/repo [path]")
 		os.Exit(1)
 	}
+	
+	repo := getRepo()
+	
+	directory := "/"
+	if len(os.Args) == 3 {
+		directory = os.Args[2]
+	}
+	
+	fmt.Println("Counting...")
+	if counts, err := ghcloc.CountInDir(repo, directory); err != nil {
+		fmt.Fprintln(os.Stderr, "Failed to count lines in "+directory+": "+
+			err.Error())
+		os.Exit(1)
+	} else {
+		fmt.Printf("\nTotal line counts (%d files):\n\n", counts.FileCount)
+		printTable(counts.TotalLines)
+		fmt.Println("")
+	}
+}
+
+func getRepo() *ghcloc.Repository {
 	var username string
 	var password string
 	fmt.Print("Github username: ")
@@ -28,14 +49,7 @@ func main() {
 		os.Exit(1)
 	}
 	repo.Authenticate(username, password)
-	fmt.Println("Counting...")
-	if counts, err := ghcloc.CountInDir(repo, "/"); err != nil {
-		fmt.Fprintln(os.Stderr, "Failed to count lines in /: "+err.Error())
-		os.Exit(1)
-	} else {
-		fmt.Println("Total line counts:")
-		printTable(counts.TotalLines)
-	}
+	return repo
 }
 
 func printTable(table map[string]int) {
@@ -49,7 +63,7 @@ func printTable(table map[string]int) {
 		for i := 0; i < maxLen-len(key); i++ {
 			fmt.Print(" ")
 		}
-		fmt.Printf("%s %d", key, value)
+		fmt.Printf("  %s %d", key, value)
 		fmt.Println("")
 	}
 }

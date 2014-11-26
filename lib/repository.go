@@ -11,10 +11,11 @@ type Repository struct {
 	UserAuth bool
 	AuthUser string
 	AuthPass string
+	ReqSem   chan struct{}
 }
 
 func NewRepository(user string, name string) *Repository {
-	return &Repository{user, name, false, "", ""}
+	return &Repository{user, name, false, "", "", make(chan struct{}, 100)}
 }
 
 func ParseRepository(compacted string) (*Repository, error) {
