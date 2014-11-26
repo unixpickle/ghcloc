@@ -1,6 +1,6 @@
 # ghcloc
 
-ghcloc - <b>G</b>ithub <b>C</b>ount <b>L</b>ines <b>o</b>f <b>C</b>ode
+ghcloc - <b>G</b>it<b>H</b>ub <b>C</b>ount <b>L</b>ines <b>o</b>f <b>C</b>ode
 
 **ghcloc** is a command-line tool for measuring the number of lines of code in a Github repository.
 
