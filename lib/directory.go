@@ -3,8 +3,6 @@ package ghcloc
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
-	"net/http"
 )
 
 const (
@@ -37,11 +35,7 @@ func (self *Repository) ReadDir(path string) ([]Entity, error) {
 		return self.ReadDir("/")
 	}
 	url := "https://api.github.com/repos/" + self.String() + "/contents" + path
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	contents, err := ioutil.ReadAll(res.Body)
+	contents, err := self.Request(url)
 	if err != nil {
 		return nil, err
 	}

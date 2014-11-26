@@ -6,12 +6,15 @@ import (
 )
 
 type Repository struct {
-	User string
-	Name string
+	User     string
+	Name     string
+	UserAuth bool
+	AuthUser string
+	AuthPass string
 }
 
 func NewRepository(user string, name string) *Repository {
-	return &Repository{user, name}
+	return &Repository{user, name, false, "", ""}
 }
 
 func ParseRepository(compacted string) (*Repository, error) {
@@ -25,4 +28,10 @@ func ParseRepository(compacted string) (*Repository, error) {
 
 func (self *Repository) String() string {
 	return self.User + "/" + self.Name
+}
+
+func (self *Repository) Authenticate(username string, password string) {
+	self.UserAuth = true
+	self.AuthUser = username
+	self.AuthPass = password
 }

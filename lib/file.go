@@ -4,8 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
-	"net/http"
 )
 
 type File struct {
@@ -24,11 +22,7 @@ func (self *File) Bytes() ([]byte, error) {
 
 func (self *Repository) ReadFile(path string) (*File, error) {
 	url := "https://api.github.com/repos/" + self.String() + "/contents" + path
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	contents, err := ioutil.ReadAll(res.Body)
+	contents, err := self.Request(url)
 	if err != nil {
 		return nil, err
 	}

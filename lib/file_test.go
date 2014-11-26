@@ -6,9 +6,9 @@ func TestReadFile(t *testing.T) {
 	repo := NewRepository("unixpickle", "ghcloc")
 	file, err := repo.ReadFile("/README.md")
 	if err != nil || file == nil {
-		t.Error("Failed to ReadFile '/README.md'.")
+		t.Error("Failed to ReadFile '/README.md':", err)
 	} else if data, err := file.Bytes(); data == nil || err != nil {
-		t.Error("Failed to get data of '/README.md'")
+		t.Error("Failed to get data of '/README.md':", err)
 	}
 	file, err = repo.ReadFile("/FILE_IS_NOT_HERE")
 	if file != nil || err == nil {
