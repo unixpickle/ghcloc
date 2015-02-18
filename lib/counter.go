@@ -43,7 +43,8 @@ func CountInFile(repo *Repository, path string) (*Counts, error) {
 		"m": "Objective-C", "mm": "Objective-C++", "md": "Markdown",
 		"makefile": "Makefile", "rb": "Ruby",
 		"mk": "Makefile", "rs": "Rust", "s": "Assembly", "asm": "Assembly",
-		"php": "PHP", "html": "HTML", "css": "CSS", "py": "Python"}
+		"php": "PHP", "html": "HTML", "css": "CSS", "py": "Python",
+		"pde": "Processing"}
 	result := NewCounts()
 
 	// Detect the language or return nothing.
